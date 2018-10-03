@@ -14,5 +14,11 @@
     <string name="button_delete">《《《</string>
     <string name="button_0">0</string>
     <string name="button_clear">clear</string>
+    <string name="button_multiple">X</string>
+    <string name="button_subtract">-</string>
+    <string name="button_add">+</string>
+    <string name="button_C">C</string>
     <string name="button_confirm">confirm</string>
+    <string name="init_compute">the initializing compute:</string>
+    <string name="modulo">the modular number:</string>
 </resources>
