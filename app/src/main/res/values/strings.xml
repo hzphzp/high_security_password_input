@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">high_security_password_input</string>
     <string name="pin_content_desc">PIN input field</string>
-    <string name="pin_label_text">PIN</string>
+    <string name="pin_label_text">enter PIN</string>
     <string name="button_1">1</string>
     <string name="button_2">2</string>
     <string name="button_3">3</string>
@@ -13,5 +13,6 @@
     <string name="button_9">9</string>
     <string name="button_delete">《《《</string>
     <string name="button_0">0</string>
+    <string name="button_clear">clear</string>
     <string name="button_confirm">confirm</string>
 </resources>
