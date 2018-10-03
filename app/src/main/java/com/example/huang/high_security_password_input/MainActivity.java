@@ -1,5 +1,6 @@
 package com.example.huang.high_security_password_input;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
     protected void toNormalInput(){
         Log.e("debug", "toNormalInput");
+        Intent intent = new Intent(this, NormalInput.class);
+        startActivity(intent);
     }
 }
 
