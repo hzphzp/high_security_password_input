@@ -6,21 +6,22 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import org.w3c.dom.Text;
+
+import net.objecthunter.exp4j.Expression;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.regex.Pattern;
 
 public class SecurityInput extends AppCompatActivity {
-    private Vibrator v;
     //the number keyboard
     private int[] bIdNum = {R.id.button_0, R.id.button_1, R.id.button_2, R.id.button_3, R.id.button_4,
                     R.id.button_5, R.id.button_6, R.id.button_7, R.id.button_8, R.id.button_9};
@@ -47,7 +48,7 @@ public class SecurityInput extends AppCompatActivity {
     private int key;
     private int init_operator;
     private int init_op_num;
-    private int modula;
+    private int modulo;
 
     //calculate formula
     private String formula;
@@ -65,7 +66,7 @@ public class SecurityInput extends AppCompatActivity {
     }
 
     public void vibrate(int t){
-        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         // Vibrate for 500 milliseconds
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             v.vibrate(VibrationEffect.createOneShot(500,VibrationEffect.DEFAULT_AMPLITUDE));
@@ -97,30 +98,74 @@ public class SecurityInput extends AppCompatActivity {
                     }
                     break;
                 case R.id.button_clear:
-                    formula = "";
+                    formula = Integer.toString(key);
                     pin.clear();
                     changeCircle(pin.size());
                     break;
                 case R.id.button_confirm:
-                    //calculate TODO:
+                    //calculate
+                    try{
+                        int result = Calculator.calc(formula, modulo);
+                        addPin(result);
+                    }catch (Exception e){
+                        //the formula is illegal, inform the user that the system has empty the formula
+                        Toast.makeText(getApplicationContext(), "wrong formula, enter again",
+                                Toast.LENGTH_LONG).show();
+                        formula = String.valueOf(key);
+                    }
             }
         }
 
     }
 
+    private void addPin(int m){
+        pin.add(m);
+        if(changeCircle(pin.size())){
+            //if the pressing is available
+            if(pin.size() == 4) {
+                //if the pressing is the last number
+                if (checkPin(pin)) {
+                    //the pin is correct
+                    Toast.makeText(getApplicationContext(), "correct pin",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    //the pin is not correct
+                    Toast.makeText(getApplicationContext(), "wrong pin",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+            //else add m to pin (already done)
+            //so do nothing
+        }
+        else{
+            //the size of pin is not legal
+            if (pin.size() > 4){
+                for (int i = 4; i < pin.size(); i++){
+                    pin.remove(i);
+                }
+            }
+        }
+        System.out.println( "the number added to the pin is " + String.valueOf(m));
+        refresh_random();
+    }
+
+    //to check the pin is or is not correct
+    public boolean checkPin(List<Integer> pin){
+        return pin.equals(pin_answer);
+    }
+
     private void refresh_random(){
-        String[] s = {"key X ", "key - ", "key + "};
+        String[] s = {"key X ", "key + "};
         key = RandomUntil.getNum(5);
         init_op_num = RandomUntil.getNum(1, 20);
-        modula = RandomUntil.getNum(10);
-        init_operator = RandomUntil.getNum(3);
+        modulo = RandomUntil.getNum(9, 20);
+        init_operator = RandomUntil.getNum(2);
         textViews[0].setText("(" + s[init_operator] + String.valueOf(init_op_num) + ")");
         textViews[1].setText(String.valueOf(key));
-        textViews[2].setText(String.valueOf(modula));
+        textViews[2].setText(String.valueOf(modulo));
         switch(init_operator){
             case 0: key = key * init_op_num; break;
-            case 1: key = key - init_op_num; break;
-            case 2: key = key + init_op_num; break;
+            case 1: key = key + init_op_num; break;
         }
         formula = Integer.toString(key);
     }
