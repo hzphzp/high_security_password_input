@@ -19,6 +19,7 @@
     <string name="button_add">+</string>
     <string name="button_C">C</string>
     <string name="button_confirm">confirm</string>
+    <string name="button_refresh">refresh</string>
     <string name="init_compute">the initializing compute:</string>
     <string name="modulo">the modular number:</string>
 </resources>

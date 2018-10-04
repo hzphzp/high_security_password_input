@@ -41,12 +41,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void toSecurityInput(){
-        Log.e("debug", "toSecurityInput: ");
-
+        Log.d("debug", "toSecurityInput: ");
+        Intent intent = new Intent(this, SecurityInput.class);
+        startActivity(intent);
     }
 
     protected void toNormalInput(){
-        Log.e("debug", "toNormalInput");
+        Log.d("debug", "toNormalInput");
         Intent intent = new Intent(this, NormalInput.class);
         startActivity(intent);
     }

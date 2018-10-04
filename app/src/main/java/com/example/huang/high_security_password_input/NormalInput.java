@@ -14,11 +14,11 @@ import java.util.List;
 public class NormalInput extends AppCompatActivity {
 
     private final String TAG = "NormalInput";
-    ImageView i1, i2, i3, i4;
-    Button button_1, button_2, button_3, button_4, button_5, button_6, button_7, button_8, button_9;
-    Button button_0, button_delete, button_confirm;
-    List<Integer> pin;
-    List<Integer> pin_answer = Arrays.asList(2, 4, 1, 8);
+    private ImageView i1, i2, i3, i4;
+    private Button button_1, button_2, button_3, button_4, button_5, button_6, button_7, button_8, button_9;
+    private Button button_0, button_delete, button_confirm;
+    private List<Integer> pin;
+    private List<Integer> pin_answer = Arrays.asList(2, 4, 1, 8);
 
 
     @Override
