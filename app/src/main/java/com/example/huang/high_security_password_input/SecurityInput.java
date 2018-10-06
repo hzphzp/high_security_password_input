@@ -69,10 +69,17 @@ public class SecurityInput extends AppCompatActivity {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         // Vibrate for 500 milliseconds
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            long[] timings = {0, 500, 500};
+            for(int i = 0; i < t; i++) {
+                VibrationEffect vibrationEffect = VibrationEffect.createWaveform(timings, -1);
+            }
             v.vibrate(VibrationEffect.createOneShot(500,VibrationEffect.DEFAULT_AMPLITUDE));
         }else{
             //deprecated in API 26
-            v.vibrate(500);
+            long[] pattern = {0, 500, 500};
+            for (int i = 0; i < t; i++){
+                v.vibrate(pattern, -1);
+            }
         }
     }
 
@@ -156,12 +163,13 @@ public class SecurityInput extends AppCompatActivity {
 
     private void refresh_random(){
         String[] s = {"key X ", "key + "};
-        key = RandomUntil.getNum(5);
+        key = RandomUntil.getNum(1, 6);
         init_op_num = RandomUntil.getNum(1, 20);
         modulo = RandomUntil.getNum(9, 20);
         init_operator = RandomUntil.getNum(2);
         textViews[0].setText("(" + s[init_operator] + String.valueOf(init_op_num) + ")");
         textViews[1].setText(String.valueOf(key));
+        vibrate(key);
         textViews[2].setText(String.valueOf(modulo));
         switch(init_operator){
             case 0: key = key * init_op_num; break;
