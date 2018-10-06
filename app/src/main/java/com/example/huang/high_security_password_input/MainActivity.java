@@ -19,12 +19,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-        int key = RandomUntil.getNum(5);
-        textView.setText(String.valueOf(key));
     }
 
     private void initView(){
-        textView = findViewById(R.id.textView);
         buttonLeft = findViewById(R.id.buttonLeft);
         buttonRight = findViewById(R.id.buttonRight);
     }

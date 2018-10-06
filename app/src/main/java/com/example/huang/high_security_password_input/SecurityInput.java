@@ -41,7 +41,7 @@ public class SecurityInput extends AppCompatActivity {
     private ImageView[] imageCircle = new ImageView[iId.length];
 
     //the text view
-    private int[] tId = {R.id.textView_init_compute, R.id.textView_random_key, R.id.textView_modulo};
+    private int[] tId = {R.id.textView_init_compute, R.id.textView_modulo};
     private TextView[] textViews = new TextView[tId.length];
 
     //random
@@ -67,19 +67,17 @@ public class SecurityInput extends AppCompatActivity {
 
     public void vibrate(int t){
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        List<Long> timings = Arrays.asList(0L, 500L, 500L, 500L, 500L, 500L, 500L, 500L, 500L, 500L, 500L);
+        long[] time = new long[2 * t + 1];
+        for(int i = 0; i < 2 * t + 1; i++){
+            time[i] = timings.get(i);
+        }
         // Vibrate for 500 milliseconds
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            long[] timings = {0, 500, 500};
-            for(int i = 0; i < t; i++) {
-                VibrationEffect vibrationEffect = VibrationEffect.createWaveform(timings, -1);
-            }
+            VibrationEffect vibrationEffect = VibrationEffect.createWaveform(time, -1);
             v.vibrate(VibrationEffect.createOneShot(500,VibrationEffect.DEFAULT_AMPLITUDE));
         }else{
-            //deprecated in API 26
-            long[] pattern = {0, 500, 500};
-            for (int i = 0; i < t; i++){
-                v.vibrate(pattern, -1);
-            }
+            v.vibrate(time, -1);
         }
     }
 
@@ -168,9 +166,8 @@ public class SecurityInput extends AppCompatActivity {
         modulo = RandomUntil.getNum(9, 20);
         init_operator = RandomUntil.getNum(2);
         textViews[0].setText("(" + s[init_operator] + String.valueOf(init_op_num) + ")");
-        textViews[1].setText(String.valueOf(key));
         vibrate(key);
-        textViews[2].setText(String.valueOf(modulo));
+        textViews[1].setText(String.valueOf(modulo));
         switch(init_operator){
             case 0: key = key * init_op_num; break;
             case 1: key = key + init_op_num; break;
