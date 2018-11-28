@@ -46,7 +46,6 @@ public class HighSecurity extends AppCompatActivity {
     private List<Integer> cryptPin_answer;
     private final List<Integer> pin_answer = Arrays.asList(2, 4, 1, 8);
     private List<ExpNode> expNodes;
-    private int writen;
 
     public void vibrate(int t){
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -82,11 +81,6 @@ public class HighSecurity extends AppCompatActivity {
         else if(Pattern.matches("\\D*", txt)){
             //react to the non-number pressing
             switch(view.getId()){
-                case R.id.button_multiple: formula += "*"; break;
-                case R.id.button_subtract: formula += "-"; break;
-                case R.id.button_add: formula += "+"; break;
-                case R.id.button_C: formula = Integer.toString(key); break;
-                case R.id.button_refresh: refresh_random();break;
                 case R.id.button_delete:
                     formula = "";
                     if(!pin.isEmpty()){
@@ -95,24 +89,11 @@ public class HighSecurity extends AppCompatActivity {
                     }
                     break;
                 case R.id.button_clear:
-                    formula = Integer.toString(key);
-                    pin.clear();
-                    changeCircle(pin.size());
+                    cryptPin.clear();
+                    changeCircle(cryptPin.size());
                     break;
-                case R.id.button_confirm:
-                    //calculate
-                    try{
-                        int result = Calculator.calc(formula, modulo);
-                        addPin(result);
-                    }catch (Exception e){
-                        //the formula is illegal, inform the user that the system has empty the formula
-                        Toast.makeText(getApplicationContext(), "wrong formula, enter again",
-                                Toast.LENGTH_LONG).show();
-                        formula = String.valueOf(key);
-                    }
             }
         }
-
     }
 
 
@@ -133,9 +114,11 @@ public class HighSecurity extends AppCompatActivity {
         key = RandomUntil.getNum(1, 6);
         vibrate(key);
         modulo = RandomUntil.getNum(9, 20);
-        ExpNode expNode = FormulaGen(key, pin_answer.get(writen)); //TODO
+        ExpNode expNode = FormulaGen(key, pin_answer.get(cryptPin.size())); //TODO
+        //TODO
         textViews[0].setText(expNode.maskFormula);
         textViews[1].setText(String.valueOf(modulo));
+        changeCircle(cryptPin.size());
     }
 
 
@@ -165,8 +148,6 @@ public class HighSecurity extends AppCompatActivity {
         //init the pin
         cryptPin = new ArrayList<>();
         cryptPin_answer = new ArrayList<>();
-
-        writen = 0;
     }
 
 
