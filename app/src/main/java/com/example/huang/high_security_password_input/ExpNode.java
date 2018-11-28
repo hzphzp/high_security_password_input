@@ -20,7 +20,7 @@ public class ExpNode {
     public static int pin;
 
     public Character node;
-    public int value;
+    public int value = 0;
     public String formula;
     public String maskFormula;
     public ExpNode leftNode;

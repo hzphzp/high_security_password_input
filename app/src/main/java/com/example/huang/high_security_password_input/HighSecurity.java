@@ -41,11 +41,13 @@ public class HighSecurity extends AppCompatActivity {
     private int key;
     private int modulo;
 
+    //formula
+    private ExpNode expNode;
+
     //pin
     private List<Integer> cryptPin;
     private List<Integer> cryptPin_answer;
     private final List<Integer> pin_answer = Arrays.asList(2, 4, 1, 8);
-    private List<ExpNode> expNodes;
 
     public void vibrate(int t){
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -71,27 +73,56 @@ public class HighSecurity extends AppCompatActivity {
         refresh_random();
     }
 
+    public void checkPin(){
+        if(cryptPin.size() != 4){
+            return;
+        }
+        if(cryptPin.equals(cryptPin_answer)){
+            // pin码正确
+            Toast.makeText(getApplicationContext(), "correct pin",
+                    Toast.LENGTH_LONG).show();
+            cryptPin.clear();
+            cryptPin_answer.clear();
+            refresh_random();
+        }
+        else{
+            //the pin is not correct
+            Toast.makeText(getApplicationContext(), "wrong pin",
+                    Toast.LENGTH_LONG).show();
+            cryptPin.clear();
+            cryptPin_answer.clear();
+            refresh_random();
+        }
+    }
+
     public void click(View view){
         String txt = ((Button) view).getText().toString();
         if(Pattern.matches("\\d", txt)){
             //react to the number pressing
-            System.out.println(txt); // TODO
             cryptPin.add(Integer.parseInt(txt));
+            System.out.println("cryptPin" + txt);
+            cryptPin_answer.add(expNode.value % modulo);
+            System.out.println("cryptPin_answer" + String.valueOf(expNode.value % modulo));
+            checkPin();
+            refresh_random();
         }
         else if(Pattern.matches("\\D*", txt)){
             //react to the non-number pressing
             switch(view.getId()){
                 case R.id.button_delete:
-                    formula = "";
-                    if(!pin.isEmpty()){
-                        pin.remove(pin.size() - 1);
-                        changeCircle(pin.size());
+                    if(!cryptPin.isEmpty()){
+                        cryptPin.remove(cryptPin.size() - 1);
+                        cryptPin_answer.remove(cryptPin_answer.size() - 1);
+                        refresh_random();
                     }
                     break;
                 case R.id.button_clear:
                     cryptPin.clear();
-                    changeCircle(cryptPin.size());
+                    cryptPin_answer.clear();
+                    refresh_random();
                     break;
+                case R.id.button_refresh:
+                    refresh_random();
             }
         }
     }
@@ -100,25 +131,30 @@ public class HighSecurity extends AppCompatActivity {
 
 
 
-    public ExpNode FormulaGen(int currentKey, int currentPin){
-        String operators = "+-*";
-        int maxNum = 9;
-        int numOfOperators = RandomUntil.getNum(3, 7);
-        ExpNode expNode = new ExpNode(numOfOperators);
-        expNode.insertX(numOfOperators, currentKey, currentPin, maxNum, operators);
-        return expNode;
-    }
+
 
 
     protected void refresh_random(){
-        key = RandomUntil.getNum(1, 6);
+        //更换 key， exp， modulo
+        key = RandomUntil.getNum(1, 5); // TODO
         vibrate(key);
-        modulo = RandomUntil.getNum(9, 20);
-        ExpNode expNode = FormulaGen(key, pin_answer.get(cryptPin.size())); //TODO
-        //TODO
+        modulo = RandomUntil.getNum(5, 10);
+        expNode = FormulaGen(key, pin_answer.get(cryptPin.size()));
         textViews[0].setText(expNode.maskFormula);
         textViews[1].setText(String.valueOf(modulo));
         changeCircle(cryptPin.size());
+    }
+
+    public ExpNode FormulaGen(int currentKey, int currentPin){
+        String operators = "+-*";
+        int maxNum = 9;
+        int numOfOperators = RandomUntil.getNum(2, 5);
+        ExpNode expNode = new ExpNode(numOfOperators);
+        while(expNode.value <= 0 || expNode.value > 50) {
+            // 这里防止结果不好看， 用户不好口算
+            expNode.insertX(numOfOperators, currentKey, currentPin, maxNum, operators);
+        }
+        return expNode;
     }
 
 
