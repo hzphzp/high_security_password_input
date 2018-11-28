@@ -37,4 +37,22 @@ public class ExpNodeTest {
         }
     }
 
+    @Test
+    public void insertX() throws Exception {
+        int key = 5;
+        int pin = 2;
+        String operators = "+-*";
+        int maxNum = 9;
+        int numOfOperators = RandomUntil.getNum(3, 7);
+        System.out.println(numOfOperators);
+        for(int i = 0; i < 100; i++) {
+            ExpNode expNode = new ExpNode(numOfOperators);
+            expNode.insertX(numOfOperators,key, pin, maxNum, operators);
+            System.out.println(expNode.formula);
+            System.out.println(expNode.maskFormula);
+            System.out.println(expNode.value);
+        }
+    }
+
+
 }
