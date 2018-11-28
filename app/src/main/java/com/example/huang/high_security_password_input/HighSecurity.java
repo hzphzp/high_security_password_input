@@ -7,13 +7,16 @@ import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class HighSecurity extends AppCompatActivity {
     //the number keyboard
@@ -38,13 +41,12 @@ public class HighSecurity extends AppCompatActivity {
     private int key;
     private int modulo;
 
-    //calculate formula
-    private String formula;
-
     //pin
     private List<Integer> cryptPin;
     private List<Integer> cryptPin_answer;
     private final List<Integer> pin_answer = Arrays.asList(2, 4, 1, 8);
+    private List<ExpNode> expNodes;
+    private int writen;
 
     public void vibrate(int t){
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -69,6 +71,74 @@ public class HighSecurity extends AppCompatActivity {
         init();
         refresh_random();
     }
+
+    public void click(View view){
+        String txt = ((Button) view).getText().toString();
+        if(Pattern.matches("\\d", txt)){
+            //react to the number pressing
+            System.out.println(txt); // TODO
+            cryptPin.add(Integer.parseInt(txt));
+        }
+        else if(Pattern.matches("\\D*", txt)){
+            //react to the non-number pressing
+            switch(view.getId()){
+                case R.id.button_multiple: formula += "*"; break;
+                case R.id.button_subtract: formula += "-"; break;
+                case R.id.button_add: formula += "+"; break;
+                case R.id.button_C: formula = Integer.toString(key); break;
+                case R.id.button_refresh: refresh_random();break;
+                case R.id.button_delete:
+                    formula = "";
+                    if(!pin.isEmpty()){
+                        pin.remove(pin.size() - 1);
+                        changeCircle(pin.size());
+                    }
+                    break;
+                case R.id.button_clear:
+                    formula = Integer.toString(key);
+                    pin.clear();
+                    changeCircle(pin.size());
+                    break;
+                case R.id.button_confirm:
+                    //calculate
+                    try{
+                        int result = Calculator.calc(formula, modulo);
+                        addPin(result);
+                    }catch (Exception e){
+                        //the formula is illegal, inform the user that the system has empty the formula
+                        Toast.makeText(getApplicationContext(), "wrong formula, enter again",
+                                Toast.LENGTH_LONG).show();
+                        formula = String.valueOf(key);
+                    }
+            }
+        }
+
+    }
+
+
+
+
+
+    public ExpNode FormulaGen(int currentKey, int currentPin){
+        String operators = "+-*";
+        int maxNum = 9;
+        int numOfOperators = RandomUntil.getNum(3, 7);
+        ExpNode expNode = new ExpNode(numOfOperators);
+        expNode.insertX(numOfOperators, currentKey, currentPin, maxNum, operators);
+        return expNode;
+    }
+
+
+    protected void refresh_random(){
+        key = RandomUntil.getNum(1, 6);
+        vibrate(key);
+        modulo = RandomUntil.getNum(9, 20);
+        ExpNode expNode = FormulaGen(key, pin_answer.get(writen)); //TODO
+        textViews[0].setText(expNode.maskFormula);
+        textViews[1].setText(String.valueOf(modulo));
+    }
+
+
 
     private void init(){
         //find the entered symbols the circles, if the pin number is pressed, than the circles will change
@@ -96,27 +166,22 @@ public class HighSecurity extends AppCompatActivity {
         cryptPin = new ArrayList<>();
         cryptPin_answer = new ArrayList<>();
 
-        //formula
-        formula = "";
+        writen = 0;
     }
 
-    protected void refresh_random(){
-        key = RandomUntil.getNum(1, 6);
-        modulo = RandomUntil.getNum(9, 20);
-        formula = FormulaGen();
-        vibrate(key);
-        textViews[0].setText(formula);
-        textViews[1].setText(String.valueOf(modulo));
-    }
 
-    public String FormulaGen(){
-        String operators = "+-*";
-        int maxNum = 9;
-        int numOfOperators = RandomUntil.getNum(3, 7);
-        ExpNode expNode = new ExpNode(numOfOperators);
-        expNode.fillNode(maxNum, operators);
-        Log.d("debug", expNode.formula);
-        Log.d("debug", String.valueOf(expNode.value));
-        return expNode.formula;
+    //change circle to full or empty, and check the size is between 0 and 4
+    public boolean changeCircle(int size){
+        if(size < 0 || size > 4){
+            //illegal size
+            return false;
+        }
+        for(int i = 0; i < size; i++){
+            imageCircle[i].setImageResource(R.drawable.circle_added);
+        }
+        for(int i = size; i < imageCircle.length; i++){
+            imageCircle[i].setImageResource(R.drawable.circle);
+        }
+        return true;
     }
 }
