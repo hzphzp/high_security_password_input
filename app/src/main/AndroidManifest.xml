@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".NormalInput" />
-        <activity android:name=".SecurityInput"></activity>
+        <activity android:name=".SecurityInput" />
+        <activity android:name=".HighSecurity"></activity>
     </application>
 
 </manifest>

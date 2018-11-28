@@ -10,6 +10,7 @@ public class RandomUntil {
 
     /**
      * 生成一个0 到 count 之间的随机数
+     * 不包含endNum
      * param int endNum 是一个大于0的数字， 如果这个数字小于或者等于0， 则直接返回0
      * return
      */

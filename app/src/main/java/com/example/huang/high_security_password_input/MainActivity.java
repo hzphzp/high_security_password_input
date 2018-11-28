@@ -34,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.buttonRight:
                 toNormalInput();
                 break;
+            case R.id.buttonBelow:
+                toHighSecurity();
+                break;
         }
     }
 
@@ -46,6 +49,12 @@ public class MainActivity extends AppCompatActivity {
     protected void toNormalInput(){
         Log.d("debug", "toNormalInput");
         Intent intent = new Intent(this, NormalInput.class);
+        startActivity(intent);
+    }
+
+    protected void toHighSecurity(){
+        Log.d("debug", "toHighSecurity");
+        Intent intent = new Intent(this, HighSecurity.class);
         startActivity(intent);
     }
 }
