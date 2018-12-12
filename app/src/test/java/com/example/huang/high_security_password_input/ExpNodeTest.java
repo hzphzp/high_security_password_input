@@ -1,12 +1,11 @@
 package com.example.huang.high_security_password_input;
 
-import android.util.Log;
+import com.example.huang.high_security_password_input.tools.ExpNode;
+import com.example.huang.high_security_password_input.tools.RandomUntil;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by huang on 11/28/2018.

@@ -1,12 +1,10 @@
 package com.example.huang.high_security_password_input;
 
-import android.util.Log;
+import com.example.huang.high_security_password_input.tools.Calculator;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by huang on 10/4/2018.

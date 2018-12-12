@@ -1,12 +1,5 @@
-package com.example.huang.high_security_password_input;
+package com.example.huang.high_security_password_input.tools;
 
-
-import android.view.ViewDebug;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 
 /**
  * Created by huang on 11/28/2018.

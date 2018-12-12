@@ -1,4 +1,4 @@
-package com.example.huang.high_security_password_input;
+package com.example.huang.high_security_password_input.tools;
 
 import java.util.Random;
 
